@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>單字賽車大賽</title>
+<style>
+:root{--bg:#ffe9a8;--card:#ffffff;--ink:#27256b;--sub:#5d5b9a;--main:#ff6b6b;--yel:#ffc93c;--ok:#2fb87e;--bad:#e8505b;--line:#27256b;--road:#3b3a58;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1a3d;--card:#2a2960;--ink:#fff7e0;--sub:#b8b6ef;--line:#fff7e0;--road:#14132f}}
+:root[data-theme="dark"]{--bg:#1b1a3d;--card:#2a2960;--ink:#fff7e0;--sub:#b8b6ef;--line:#fff7e0;--road:#14132f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Baloo 2","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;min-height:100vh}
+main{max-width:520px;margin:0 auto;padding:16px 14px 40px;text-align:center}
+h1{font-size:2rem;margin:8px 0 4px}
+p.sub{color:var(--sub);margin:0 0 16px}
+.go{display:block;width:100%;margin:0 0 12px;padding:14px;border:3px solid var(--line);border-radius:22px;background:var(--main);color:#fff;font:inherit;font-size:1.4rem;font-weight:800;box-shadow:0 5px 0 var(--line);cursor:pointer}
+.go:active{transform:translateY(4px);box-shadow:0 1px 0 var(--line)}
+.go.alt{background:var(--card);color:var(--ink)}
+.track{background:var(--road);border:3px solid var(--line);border-radius:18px;padding:6px 0;margin-bottom:14px;position:relative;overflow:hidden}
+.lane{position:relative;height:40px;border-bottom:3px dashed rgba(255,255,255,.35);margin:0 36px 0 6px}
+.lane:last-child{border-bottom:0}
+.kart{position:absolute;left:0;top:3px;font-size:1.9rem;line-height:1;transform:scaleX(-1);transition:left .9s cubic-bezier(.3,1.4,.5,1)}
+.kart.me::after{content:"我";position:absolute;top:-4px;left:-4px;transform:scaleX(-1);font-size:.7rem;background:var(--yel);color:#27256b;border-radius:8px;padding:0 5px;font-weight:800}
+.flag{position:absolute;right:6px;top:0;bottom:0;width:26px;font-size:1.5rem;display:flex;align-items:center;background:repeating-conic-gradient(#fff 0 25%,#222 0 50%) 0 0/14px 14px;opacity:.9;border-radius:4px;justify-content:center}
+.bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-weight:800}
+.back{border:3px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;font:inherit;padding:2px 12px;cursor:pointer}
+.stage{background:var(--card);border:3px solid var(--line);border-radius:24px;padding:14px 10px;margin-bottom:14px;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.big{font-size:4.6rem;line-height:1;font-weight:800;color:var(--main)}
+.emoji{font-size:3.6rem;line-height:1}
+.word{font-size:2.2rem;font-weight:800;letter-spacing:.12em}
+.hint{color:var(--sub)}
+.say{border:3px solid var(--line);background:var(--yel);color:#27256b;border-radius:50px;font:inherit;font-size:1.1rem;padding:5px 18px;cursor:pointer}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{border:3px solid var(--line);border-radius:20px;background:var(--card);color:var(--ink);font:inherit;font-size:2rem;font-weight:800;padding:10px 6px;cursor:pointer;box-shadow:0 4px 0 var(--line)}
+.opt span{display:block;font-size:1.8rem}
+.opt:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.opt.ok{background:var(--ok);color:#fff}
+.opt.bad{background:var(--bad);color:#fff;animation:sh .3s}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.toast{height:30px;font-size:1.2rem;font-weight:800;margin-bottom:6px}
+.count{font-size:7rem;font-weight:800;color:var(--main);margin:30px 0;animation:pop .9s}
+@keyframes pop{0%{transform:scale(.3);opacity:0}40%{transform:scale(1.2);opacity:1}100%{transform:scale(1)}}
+.medal{font-size:5rem;margin:6px 0}
+.rank{text-align:left;background:var(--card);border:3px solid var(--line);border-radius:18px;padding:8px 16px;margin:0 0 16px;font-size:1.2rem}
+.rank div{padding:3px 0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.lv{text-align:left;margin:16px 0 8px;font-size:1.1rem;color:var(--sub)}
+.slots{display:flex;gap:8px;justify-content:center;margin-top:8px;min-height:54px}
+.slot{width:46px;height:54px;border:3px solid var(--line);border-radius:12px;background:var(--bg);font-size:2rem;font-weight:800;line-height:48px}
+.slots.good .slot{background:var(--ok);color:#fff}
+.slots.wrong{animation:sh .3s}.slots.wrong .slot{background:var(--bad);color:#fff}
+.tiles{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.tile{width:56px;height:56px;border:3px solid var(--line);border-radius:16px;background:var(--yel);color:#27256b;font:inherit;font-size:1.8rem;font-weight:800;box-shadow:0 4px 0 var(--line);cursor:pointer}
+.tile:disabled{opacity:.3}.tile.del{background:var(--card);color:var(--ink)}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+const WORDS=[["apple","🍎"],["ant","🐜"],["ax","🪓"],["bee","🐝"],["bear","🐻"],["ball","⚽"],["cat","🐱"],["cup","☕"],["cap","🧢"]];
+const LET="abcdefghijklmnopqrstuvwxyz".split("");
+const CONF={b:"dpq",d:"bpq",p:"bdq",q:"bdp",m:"nw",n:"mu",u:"nv",v:"uw",i:"jl",l:"ij",c:"eo",e:"co",o:"ce",a:"eo",g:"qy",f:"t",t:"f",h:"nb",r:"n",s:"z",z:"s",w:"mv",y:"gv",k:"x",x:"k",j:"i"};
+const app=document.getElementById("app");
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const ri=n=>Math.floor(Math.random()*n);
+const shuffle=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.8;speechSynthesis.speak(u)}catch(e){}}
+function pad(c,arr){const s=new Set(arr.filter(x=>x!==c));while(s.size<3)s.add(rnd(LET.filter(x=>x!==c)));return [...s].slice(0,3)}
+function misspell(w){const s=new Set();let g=0;while(s.size<3&&g++<60){const b=w.split("");const t=ri(3),i=ri(b.length);
+ if(t===0&&b.length>1){const j=(i+1)%b.length;[b[i],b[j]]=[b[j],b[i]]}else if(t===1){b[i]=rnd(LET)}else if(b.length>2){b.splice(i,1)}else{b.push(rnd(LET))}
+ const r=b.join("");if(r!==w)s.add(r)}
+ while(s.size<3)s.add(w+rnd(LET)+s.size);return [...s]}
+const ch=(stage,speak,opts,ans)=>({t:"c",stage,speak,opts:shuffle(opts),ans,after:speak||ans});
+function makeQ(lv,m){
+ const [w,e]=rnd(WORDS);
+ const SAY=`<button class="say" data-s="${w}">🔊 聽聽看</button>`;
+ if(lv===1){
+  m=m||1+ri(3);
+  if(m===1){const l=rnd(LET);return ch(`<div class="big">${l.toUpperCase()}</div><button class="say" data-s="${l}">🔊 聽聽看</button><div class="hint">找出它的小寫</div>`,l,[l,...pad(l,[])].map(x=>({v:x,h:x})),l)}
+  if(m===2){const d=shuffle(WORDS.filter(x=>x[0]!==w)).slice(0,3);return ch(`<button class="say" data-s="${w}" style="font-size:2rem;padding:12px 28px">🔊</button><div class="hint">聽聽看，是哪個單字？</div>`,w,[[w,e],...d].map(x=>({v:x[0],h:`<span>${x[1]}</span>${x[0]}`})),w)}
+  const i=ri(w.length),a=w[i];const sh=w.split("").map((c,j)=>j===i?"＿":c).join(" ");
+  return ch(`<div class="emoji">${e}</div><div class="word">${sh}</div>${SAY}`,null,[a,...pad(a,[])].map(x=>({v:x,h:x})),a)}
+ const k=rnd(lv===2?["conf","seq","first","listen","spell"]:["spell","spell","mis","mis","seq","conf"]);
+ if(k==="conf"){const l=rnd(Object.keys(CONF)),up=Math.random()<.5;
+  return ch(`<div class="big">${up?l.toUpperCase():l}</div><div class="hint">找出它的${up?"小寫":"大寫"}（小心長得像的字母）</div>`,null,[l,...pad(l,shuffle(CONF[l].split("")))].map(x=>({v:x,h:up?x:x.toUpperCase()})),l)}
+ if(k==="seq"){const up=Math.random()<.5,f=x=>up?x.toUpperCase():x;
+  const i=lv===2?1+ri(24):2+ri(23);const shown=(lv===2?[LET[i-1],"＿",LET[i+1]]:[LET[i-2],LET[i-1],"＿",LET[i+1]]).map(x=>x==="＿"?x:f(x)).join(" ");
+  return ch(`<div class="word">${shown}</div><div class="hint">缺的是哪個字母？</div>`,null,[LET[i],...pad(LET[i],[LET[i-1],LET[i+1],LET[i+2],LET[i-2]].filter(Boolean))].map(x=>({v:x,h:f(x)})),LET[i])}
+ if(k==="first"){const f=Math.random()<.5,a=f?w[0]:w[w.length-1];
+  return ch(`<div class="emoji">${e}</div>${SAY}<div class="hint">${f?"第一個":"最後一個"}字母是什麼？</div>`,w,[a,...pad(a,[])].map(x=>({v:x,h:x})),a)}
+ if(k==="listen"){const d=shuffle(WORDS.filter(x=>x[0]!==w)).sort((a,b)=>(b[0][0]===w[0])-(a[0][0]===w[0])).slice(0,3);
+  return ch(`<button class="say" data-s="${w}" style="font-size:2rem;padding:12px 28px">🔊</button><div class="hint">聽聽看，是哪個單字？</div>`,w,[w,...d.map(x=>x[0])].map(x=>({v:x,h:x})),w)}
+ if(k==="mis")return ch(`<button class="say" data-s="${w}" style="font-size:2rem;padding:12px 28px">🔊</button><div class="hint">哪一個拼對了？</div>`,w,[w,...misspell(w)].map(x=>({v:x,h:x})),w);
+ const ex=lv===3?[rnd(LET),rnd(LET)]:[];
+ return{t:"s",word:w,stage:(lv===2?`<div class="emoji">${e}</div>`:"")+`${SAY}<div class="hint">按字母，拼出單字${lv===3?"（有多餘字母喔）":""}</div>`,speak:w,tiles:shuffle([...w.split(""),...ex]),after:w};
+}
+function renderQ(q,el,ok,bad){
+ const sb=q.t==="s";
+ el.innerHTML=`<div class="stage">${q.stage}${sb?'<div class="slots" id="sl"></div>':''}</div>`+(sb?'<div class="tiles" id="tl"></div>':`<div class="opts">${q.opts.map(o=>`<button class="opt" data-v="${o.v}">${o.h}</button>`).join("")}</div>`);
+ el.querySelectorAll(".say").forEach(b=>b.onclick=()=>say(b.dataset.s));
+ if(q.speak)setTimeout(()=>say(q.speak),300);
+ if(!sb){el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+  if(b.dataset.v===q.ans){b.classList.add("ok");el.querySelectorAll(".opt").forEach(x=>x.disabled=true);say(q.after);ok()}
+  else{b.classList.add("bad");b.disabled=true;bad()}});return}
+ const w=q.word,got=[],sl=el.querySelector("#sl"),tl=el.querySelector("#tl");
+ const draw=()=>{sl.innerHTML=w.split("").map((_,i)=>`<span class="slot">${got[i]!==undefined?q.tiles[got[i]]:""}</span>`).join("");
+  tl.innerHTML=q.tiles.map((c,i)=>`<button class="tile" data-i="${i}" ${got.includes(i)?"disabled":""}>${c}</button>`).join("")+`<button class="tile del" id="dl">⌫</button>`;
+  tl.querySelectorAll(".tile[data-i]").forEach(b=>b.onclick=()=>{got.push(+b.dataset.i);draw();if(got.length===w.length)check()});
+  tl.querySelector("#dl").onclick=()=>{got.pop();draw()}};
+ const check=()=>{if(got.map(i=>q.tiles[i]).join("")===w){sl.classList.add("good");tl.querySelectorAll("button").forEach(b=>b.disabled=true);say(w);ok()}
+  else{sl.classList.add("wrong");bad();setTimeout(()=>{got.length=0;draw()},600)}};
+ draw();
+}
+const TOT={1:10,2:12,3:12};
+const RACERS=[{n:"我",e:"🏎️"},{n:"藍藍",e:"🚙"},{n:"黃黃",e:"🚕"},{n:"綠綠",e:"🛻"}];
+const AI={1:[.6,1.05],2:[.7,1.0],3:[.8,1.05]};
+let S={};
+function home(){
+ app.innerHTML=`<h1>🏁 單字賽車大賽</h1><p class="sub">答對題目就能加速衝刺，第一個到終點的人獲勝！</p>
+ <div class="track">${RACERS.map(r=>`<div class="lane"><div class="kart">${r.e}</div></div>`).join("")}<div class="flag" style="top:6px;bottom:6px"></div></div>
+ <button class="go" data-l="1">🚦 簡單賽道</button>
+ <button class="go" data-l="2" style="background:var(--yel);color:#27256b">🚦🚦 進階賽道</button>
+ <button class="go" data-l="3" style="background:var(--ok)">🚦🚦🚦 高手賽道</button>
+ <p class="sub">答對 ⚡ 衝很快<br>答錯 🍌 打滑變慢<br>記得打開聲音喔！</p>`;
+ app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>begin(+b.dataset.l));
+}
+function begin(l){
+ S={l,n:0,total:TOT[l],pos:[0,0,0,0],miss:false};
+ let c=3;
+ const tick=()=>{
+  if(c===0){app.innerHTML=`<div class="count" style="color:var(--ok)">GO!</div>`;setTimeout(next,700);return}
+  app.innerHTML=`<div class="count">${c}</div>`;c--;setTimeout(tick,900);
+ };tick();
+}
+function trackHTML(){
+ return `<div class="track">${RACERS.map((r,i)=>`<div class="lane"><div class="kart ${i?'':'me'}" id="k${i}" style="left:calc(${S.pos[i]}% - ${S.pos[i]*0.3}px)">${r.e}</div></div>`).join("")}<div class="flag" style="top:6px;bottom:6px"></div></div>`;
+}
+function move(i,add){S.pos[i]=Math.min(S.pos[i]+add,100);const k=document.getElementById("k"+i);if(k)k.style.left=`calc(${S.pos[i]}% - ${S.pos[i]*0.3}px)`}
+function next(){
+ if(S.n>=S.total)return finish();
+ S.miss=false;
+ app.innerHTML=`<div class="bar"><button class="back" id="bk">←</button><span>第 ${S.n+1} / ${S.total} 圈</span><span></span></div>${trackHTML()}<div class="toast" id="t"></div><div id="qa"></div>`;
+ document.getElementById("bk").onclick=home;
+ const step=105/S.total,[lo,hi]=AI[S.l];
+ renderQ(makeQ(S.l,0),document.getElementById("qa"),()=>{
+  const t=document.getElementById("t");
+  if(S.miss){t.textContent="🐢 慢慢前進…";move(0,step*.4)}else{t.textContent="⚡ 加速衝刺！";move(0,step)}
+  for(let i=1;i<4;i++)move(i,step*(lo+Math.random()*(hi-lo)));
+  S.n++;setTimeout(next,1600);
+ },()=>{S.miss=true;document.getElementById("t").textContent="🍌 打滑了！再試一次"});
+}
+function finish(){
+ const order=RACERS.map((r,i)=>({...r,p:S.pos[i]+(i===0?0.01:0)})).sort((a,b)=>b.p-a.p);
+ const rank=order.findIndex(r=>r.n==="我")+1;
+ const medal=["🥇","🥈","🥉","🏅"][rank-1];
+ const msg=rank===1?"冠軍！你太厲害了！":rank===2?"亞軍！再拚一次就是冠軍！":"繼續練習，下次衝更快！";
+ app.innerHTML=`<h1>比賽結束</h1><div class="medal">${medal}</div><p class="sub">第 ${rank} 名，${msg}</p>
+ <div class="rank">${order.map((r,i)=>`<div>${i+1}. ${r.e} ${r.n}</div>`).join("")}</div>
+ ${S.l<3&&rank===1?`<button class="go" id="up">🔥 挑戰下一級賽道</button>`:""}
+ <button class="go" id="a">🔁 再賽一場</button><button class="go alt" id="h">🏠 回首頁</button>`;
+ document.getElementById("a").onclick=()=>begin(S.l);document.getElementById("h").onclick=home;
+ const u=document.getElementById("up");if(u)u.onclick=()=>begin(S.l+1);
+ if(rank===1)say("You win!");
+}
+home();
+</script>
+</body>
+</html>
