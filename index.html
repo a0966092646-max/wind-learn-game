@@ -210,6 +210,22 @@
       cursor: pointer;
       margin-top: 8px;
     }
+    .kart-link-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(90deg, #f97316, #ef4444);
+      box-shadow: 0 4px 0 #b91c1c;
+      margin-top: 10px;
+      transition: transform 0.12s ease;
+    }
+    .kart-link-btn:hover { transform: translateY(-2px); }
     .mic-btn {
       width: 100%;
       border: none;
@@ -486,6 +502,7 @@
         </div>
 
         <button class="primary-btn" onclick="showResultSheet()">🏆 查看闖關測驗結果單</button>
+        <a class="kart-link-btn" href="english-kart-race.html">🏎️ 前往第二個遊戲：English Kart Race</a>
       `;
     }
 
