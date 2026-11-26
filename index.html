@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>《大風吹》＆ 英文 Aa~Zz 口說闖關大冒險</title>
+  <style>
+    :root {
+      --bg: #fff8f3;
+      --card: #ffffff;
+      --yellow: #f7c948;
+      --blue: #0ea5e9;
+      --green: #10b981;
+      --purple: #a855f7;
+      --orange: #fb923c;
+      --pink: #ec4899;
+      --red: #ef4444;
+      --text: #1f2937;
+      --muted: #6b7280;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+      background: #111827;
+      display: flex;
+      justify-content: center;
+      padding: 14px;
+      color: var(--text);
+    }
+    .app {
+      width: 100%;
+      max-width: 440px;
+      background: linear-gradient(180deg, #fffdf9 0%, #fff1f5 100%);
+      border-radius: 26px;
+      padding: 14px;
+      box-shadow: 0 22px 45px rgba(0, 0, 0, 0.35);
+    }
+    .panel {
+      background: var(--card);
+      border: 3px solid var(--yellow);
+      border-radius: 20px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .home-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 2px solid #e5e7eb;
+      background: #fff;
+      font-size: 19px;
+      cursor: pointer;
+    }
+    .app-title {
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+    .app-sub {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .star-pill {
+      background: #fef9c3;
+      border: 2px solid var(--yellow);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-weight: 800;
+      font-size: 15px;
+      color: #b45309;
+    }
+    .action-row {
+      display: flex;
+      gap: 6px;
+    }
+    .small-btn {
+      border: 2px solid #bae6fd;
+      background: #e0f2fe;
+      color: #0369a1;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .level-card {
+      border-radius: 18px;
+      padding: 13px 14px;
+      color: #fff;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: transform 0.12s ease;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.12);
+    }
+    .level-card:hover { transform: translateY(-2px); }
+    .lv-warm { background: linear-gradient(90deg, #f59e0b, #fb923c); }
+    .lv-1 { background: linear-gradient(90deg, #2563eb, #0ea5e9); }
+    .lv-2 { background: linear-gradient(90deg, #059669, #10b981); }
+    .lv-3 { background: linear-gradient(90deg, #7c3aed, #ec4899); }
+    .lv-speak { background: linear-gradient(90deg, #e11d48, #f97316); }
+    .lv-tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .lv-title { font-size: 17px; font-weight: 800; }
+    .lv-desc { font-size: 12.5px; opacity: 0.96; margin-top: 2px; }
+    .lv-badge {
+      background: #fff;
+      color: #111827;
+      border-radius: 12px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      flex: 1;
+      min-width: 90px;
+      padding: 8px 6px;
+      border-radius: 12px;
+      border: 2px solid #e5e7eb;
+      background: #f9fafb;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: #fef08a;
+      border-color: var(--yellow);
+      color: #92400e;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .flash-card {
+      background: #fffbeb;
+      border: 2px solid #fde68a;
+      border-radius: 14px;
+      padding: 9px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .flash-card:hover { background: #fef3c7; }
+    .word-main { font-size: 18px; font-weight: 800; }
+    .zhuyin { font-size: 12.5px; color: #b45309; font-weight: 700; margin: 2px 0; }
+    .tip-text { font-size: 11.5px; color: #4b5563; line-height: 1.35; }
+    .poem-box {
+      background: #f0f9ff;
+      border: 2px solid #bae6fd;
+      border-radius: 14px;
+      padding: 10px;
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+    .primary-btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 11px 14px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(180deg, #38bdf8, #0284c7);
+      box-shadow: 0 4px 0 #0369a1;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .mic-btn {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(180deg, #fb7185, #e11d48);
+      box-shadow: 0 4px 0 #9f1239;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .mic-btn.listening {
+      animation: pulse 0.9s infinite;
+      background: linear-gradient(180deg, #f59e0b, #ea580c);
+      box-shadow: 0 4px 0 #9a3412;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    .secondary-btn {
+      width: 100%;
+      border: 2px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 9px 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+      background: #f8fafc;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+    .opt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .opt-btn {
+      padding: 11px 8px;
+      border-radius: 12px;
+      border: 2px solid #cbd5e1;
+      background: #f8fafc;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .opt-btn.correct { background: #dcfce7; border-color: #16a34a; color: #166534; }
+    .opt-btn.wrong { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+    .match-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .match-item {
+      padding: 10px 8px;
+      border-radius: 12px;
+      border: 2px solid #d1d5db;
+      background: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 7px;
+    }
+    .match-item.selected { border-color: #2563eb; background: #eff6ff; }
+    .match-item.matched { border-color: #10b981; background: #d1fae5; color: #065f46; }
+    .input-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .fill-input {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 2px solid #93c5fd;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .speak-stage {
+      background: #fff1f2;
+      border: 2px solid #fecdd3;
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+      margin-top: 8px;
+    }
+    .target-big {
+      font-size: 28px;
+      font-weight: 900;
+      color: #be123c;
+      margin: 4px 0;
+    }
+    .meter-wrap {
+      height: 12px;
+      background: #ffe4e6;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0 6px;
+    }
+    .meter-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #fb7185, #f59e0b, #10b981);
+      transition: width 0.12s ease;
+    }
+    .feedback {
+      margin-top: 10px;
+      font-weight: 800;
+      font-size: 14px;
+      min-height: 22px;
+    }
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .result-table th, .result-table td {
+      border: 1px solid #e5e7eb;
+      padding: 7px 6px;
+      text-align: center;
+    }
+    .result-table th { background: #fef9c3; }
+    .badge-box {
+      background: #fdf4ff;
+      border: 2px solid #e879f9;
+      border-radius: 14px;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="panel">
+      <div class="top-bar">
+        <div class="brand">
+          <button class="home-btn" onclick="goHome()" title="回關卡大廳">🏠</button>
+          <div>
+            <div class="app-title">《大風吹》＆ 英文 Aa~Zz 闖關</div>
+            <div class="app-sub">Sean 學習專案｜小一國語二課 ＋ IVY 單字</div>
+          </div>
+        </div>
+        <div class="star-pill">⭐ <span id="starCount">0</span></div>
+      </div>
+      <div class="status-row">
+        <div style="font-size:12.5px; color:#4b5563;" id="statusHint">點卡片聽發音，也能「大聲唸出來」闖關！</div>
+        <div class="action-row">
+          <button class="small-btn" onclick="toggleVoice()" id="voiceBtn">🔊 語音開</button>
+          <button class="small-btn" onclick="showResultSheet()">🏆 成績單</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="stage"></div>
+  </div>
+
+  <script>
+    const zhWords = [
+      { word: "大風", zhuyin: "ㄉㄚˋ ㄈㄥ", tip: "風吹得很大，把東西吹動" },
+      { word: "吹", zhuyin: "ㄔㄨㄟ", tip: "嘴巴嘟嘟吹氣，大風吹過來" },
+      { word: "不停", zhuyin: "ㄅㄨˋ ㄖㄥˊ", tip: "沒有停下來（停：ㄖㄥˊ）" },
+      { word: "跑", zhuyin: "ㄆㄠˇ", tip: "雙腳快快動，不停地跑" },
+      { word: "我們", zhuyin: "ㄨㄛˇ ㄇㄣ˙", tip: "包含自己和大家一起" },
+      { word: "玩", zhuyin: "ㄨㄢˊ", tip: "大家一起開心地玩遊戲" },
+      { word: "一起來", zhuyin: "ㄧˋ ㄑㄧˇ ㄌㄞˊ", tip: "揪大家一起來（一：ㄧˋ）" },
+      { word: "的", zhuyin: "ㄉㄜ˙", tip: "連接詞語的輕聲小幫手" }
+    ];
+
+    const enWords = [
+      { en: "apple", zh: "蘋果", fam: "A" },
+      { en: "ant", zh: "螞蟻", fam: "A" },
+      { en: "ax", zh: "斧頭", fam: "A" },
+      { en: "bee", zh: "蜜蜂", fam: "B" },
+      { en: "bear", zh: "熊", fam: "B" },
+      { en: "ball", zh: "球", fam: "B" },
+      { en: "cat", zh: "貓", fam: "C" },
+      { en: "cup", zh: "杯子", fam: "C" },
+      { en: "cap", zh: "帽子", fam: "C" }
+    ];
+
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(ch => `${ch}${ch.toLowerCase()}`);
+
+    const state = {
+      stars: 0,
+      voiceOn: true,
+      warmDone: false,
+      scores: { lv1: 0, lv2: 0, lv3: 0, speak: 0 },
+      maxScores: { lv1: 6, lv2: 6, lv3: 6, speak: 6 },
+      passed: { lv1: false, lv2: false, lv3: false, speak: false }
+    };
+
+    let activeMicStop = null;
+
+    function stopActiveMic() {
+      if (typeof activeMicStop === "function") {
+        activeMicStop();
+        activeMicStop = null;
+      }
+    }
+
+    function speak(text, lang = "en-US") {
+      if (!state.voiceOn || !("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = lang;
+      utter.rate = lang === "en-US" ? 0.88 : 0.95;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function toggleVoice() {
+      state.voiceOn = !state.voiceOn;
+      document.getElementById("voiceBtn").textContent = state.voiceOn ? "🔊 語音開" : "🔇 語音關";
+    }
+
+    function addStars(n) {
+      state.stars += n;
+      document.getElementById("starCount").textContent = state.stars;
+    }
+
+    function goHome() {
+      stopActiveMic();
+      document.getElementById("stage").innerHTML = `
+        <div class="level-card lv-warm" onclick="openWarmup()">
+          <div>
+            <div class="lv-tag">暖身準備</div>
+            <div class="lv-title">魔法學習圖鑑</div>
+            <div class="lv-desc">《大風吹》課文與 8 詞 ＋ Aa~Zz 與 A/B/C 單字</div>
+          </div>
+          <div class="lv-badge">${state.warmDone ? "✅ 已暖身" : "開始 ➔"}</div>
+        </div>
+
+        <div class="level-card lv-1" onclick="startLv1()">
+          <div>
+            <div class="lv-tag">關卡一：聽力考驗</div>
+            <div class="lv-title">聽力點餐王</div>
+            <div class="lv-desc">聽聽國語詞語與英文單字，選出正確答案（6 題）</div>
+          </div>
+          <div class="lv-badge">${state.passed.lv1 ? "✅ " + state.scores.lv1 + "/6" : "挑戰 ➔"}</div>
+        </div>
+
+        <div class="level-card lv-2" onclick="startLv2()">
+          <div>
+            <div class="lv-tag">關卡二：配對連線</div>
+            <div class="lv-title">趣味連連看</div>
+            <div class="lv-desc">注音連詞語、英文單字連中文意思（6 組）</div>
+          </div>
+          <div class="lv-badge">${state.passed.lv2 ? "✅ " + state.scores.lv2 + "/6" : "挑戰 ➔"}</div>
+        </div>
+
+        <div class="level-card lv-3" onclick="startLv3()">
+          <div>
+            <div class="lv-tag">關卡三：拼字與填空</div>
+            <div class="lv-title">單字偵探填空</div>
+            <div class="lv-desc">課文填空、英文缺字與字母接龍挑戰（6 題）</div>
+          </div>
+          <div class="lv-badge">${state.passed.lv3 ? "✅ " + state.scores.lv3 + "/6" : "挑戰 ➔"}</div>
+        </div>
+
+        <div class="level-card lv-speak" onclick="startSpeakingChallenge()">
+          <div>
+            <div class="lv-tag">關卡四：口說大聲唸</div>
+            <div class="lv-title">大聲唸出來闖關 🎤</div>
+            <div class="lv-desc">對著麥克風大聲唸出詞語與單字，擊退小怪獸（6 題）</div>
+          </div>
+          <div class="lv-badge">${state.passed.speak ? "✅ " + state.scores.speak + "/6" : "唸唸看 ➔"}</div>
+        </div>
+
+        <button class="primary-btn" onclick="showResultSheet()">🏆 查看闖關測驗結果單</button>
+      `;
+    }
+
+    function openWarmup(tab = "zh") {
+      stopActiveMic();
+      state.warmDone = true;
+      addStars(1);
+      const stage = document.getElementById("stage");
+      stage.innerHTML = `
+        <div class="panel">
+          <div style="font-weight:800; font-size:17px; margin-bottom:8px;">🧡 暖身準備：魔法學習圖鑑</div>
+          <div class="tabs">
+            <button class="tab-btn ${tab === "zh" ? "active" : ""}" onclick="openWarmup('zh')">📖 國語大風吹</button>
+            <button class="tab-btn ${tab === "en" ? "active" : ""}" onclick="openWarmup('en')">🍎 A/B/C 單字</button>
+            <button class="tab-btn ${tab === "abc" ? "active" : ""}" onclick="openWarmup('abc')">🔤 Aa~Zz</button>
+          </div>
+          <div id="warmContent"></div>
+          <button class="primary-btn" onclick="startLv1()">我記住了！去關卡一 ➔</button>
+        </div>
+      `;
+      const box = document.getElementById("warmContent");
+      if (tab === "zh") {
+        box.innerHTML = `
+          <div class="poem-box" onclick="speak('二、大風吹。大風吹 大風吹 我們來玩大風吹。大風吹 大風吹 大風吹。我們不停的跑 大風不停的吹。', 'zh-TW')" style="cursor:pointer;">
+            <strong>二、大風吹</strong> 🔊（點我聽朗讀）<br>
+            大風吹 大風吹 我們來玩大風吹<br>
+            大風吹 大風吹 大風吹<br>
+            我們不停的跑 大風不停的吹
+          </div>
+          <div class="grid-2">
+            ${zhWords.map(w => `
+              <div class="flash-card" onclick="speak('${w.word}', 'zh-TW'); addStars(1);">
+                <div class="word-main">${w.word}</div>
+                <div class="zhuyin">${w.zhuyin}</div>
+                <div class="tip-text">${w.tip}</div>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      } else if (tab === "en") {
+        box.innerHTML = `
+          <div class="grid-2">
+            ${enWords.map(w => `
+              <div class="flash-card" onclick="speak('${w.en}', 'en-US'); addStars(1);">
+                <div class="word-main">${w.en}</div>
+                <div class="zhuyin">${w.fam} 家族｜${w.zh}</div>
+                <div class="tip-text">點卡片聽英文發音 🔊</div>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      } else {
+        box.innerHTML = `
+          <div class="grid-4">
+            ${alphabet.map(pair => `
+              <div class="flash-card" onclick="speak('${pair[0]}', 'en-US'); addStars(1);">
+                <div class="word-main" style="font-size:15px;">${pair}</div>
+                <div class="tip-text">🔊</div>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      }
+    }
+
+    function startLv1() {
+      stopActiveMic();
+      const questions = [
+        { lang: "zh-TW", say: "不停", prompt: "聽聽看，哪一個是「ㄅㄨˋ ㄖㄥˊ」？", opts: ["不停", "一起來", "我們", "的"], ans: "不停" },
+        { lang: "zh-TW", say: "一起來", prompt: "聽聽看，哪一個是「ㄧˋ ㄑㄧˇ ㄌㄞˊ」？", opts: ["大風", "一起來", "跑", "玩"], ans: "一起來" },
+        { lang: "zh-TW", say: "大風", prompt: "聽聽看，哪一個是「ㄉㄚˋ ㄈㄥ」？", opts: ["吹", "的", "大風", "不停"], ans: "大風" },
+        { lang: "en-US", say: "bear", prompt: "Listen and pick the word:", opts: ["bee", "bear", "ball", "cap"], ans: "bear" },
+        { lang: "en-US", say: "cup", prompt: "Listen and pick the word:", opts: ["cat", "cup", "ant", "ax"], ans: "cup" },
+        { lang: "en-US", say: "apple", prompt: "Listen and pick the word:", opts: ["apple", "ant", "ax", "ball"], ans: "apple" }
+      ];
+      let idx = 0;
+      let correct = 0;
+
+      function renderQ() {
+        const q = questions[idx];
+        speak(q.say, q.lang);
+        document.getElementById("stage").innerHTML = `
+          <div class="panel">
+            <div style="font-weight:800; font-size:17px;">💙 關卡一：聽力點餐王（第 ${idx + 1} / ${questions.length} 題）</div>
+            <p style="margin:8px 0; font-size:14px;">${q.prompt}</p>
+            <button class="small-btn" onclick="speak('${q.say}', '${q.lang}')">🔊 再聽一次</button>
+            <div class="opt-grid">
+              ${q.opts.map(o => `<button class="opt-btn" onclick="pick('${o}', this)">${o}</button>`).join("")}
+            </div>
+            <div class="feedback" id="lv1Fb"></div>
+          </div>
+        `;
+        window.pick = function(choice, btn) {
+          const fb = document.getElementById("lv1Fb");
+          if (choice === q.ans) {
+            btn.classList.add("correct");
+            correct++;
+            addStars(2);
+            fb.style.color = "#15803d";
+            fb.textContent = "🎉 答對了！+2 顆星星";
+          } else {
+            btn.classList.add("wrong");
+            fb.style.color = "#b91c1c";
+            fb.textContent = `答案是「${q.ans}」喔！`;
+          }
+          setTimeout(() => {
+            idx++;
+            if (idx < questions.length) renderQ();
+            else {
+              state.scores.lv1 = correct;
+              state.passed.lv1 = true;
+              showResultSheet();
+            }
+          }, 950);
+        };
+      }
+      renderQ();
+    }
+
+    function startLv2() {
+      stopActiveMic();
+      const pairs = [
+        { id: "1", left: "我們", right: "ㄨㄛˇ ㄇㄣ˙", lang: "zh-TW" },
+        { id: "2", left: "跑", right: "ㄆㄠˇ", lang: "zh-TW" },
+        { id: "3", left: "的", right: "ㄉㄜ˙", lang: "zh-TW" },
+        { id: "4", left: "apple", right: "蘋果", lang: "en-US" },
+        { id: "5", left: "cat", right: "貓", lang: "en-US" },
+        { id: "6", left: "cap", right: "帽子", lang: "en-US" }
+      ];
+      let selectedLeft = null;
+      let matchedIds = new Set();
+      const rights = [...pairs].sort(() => Math.random() - 0.5);
+
+      function renderMatch() {
+        document.getElementById("stage").innerHTML = `
+          <div class="panel">
+            <div style="font-weight:800; font-size:17px;">💚 關卡二：趣味連連看</div>
+            <p style="margin:6px 0 0; font-size:13px; color:#4b5563;">先點左邊詞語，再點右邊配對（已配對 ${matchedIds.size} / 6）</p>
+            <div class="match-cols">
+              <div>
+                ${pairs.map(p => `
+                  <div class="match-item ${matchedIds.has(p.id) ? "matched" : ""} ${selectedLeft === p.id ? "selected" : ""}"
+                       onclick="clickLeft('${p.id}', '${p.left}', '${p.lang}')">${p.left}</div>
+                `).join("")}
+              </div>
+              <div>
+                ${rights.map(p => `
+                  <div class="match-item ${matchedIds.has(p.id) ? "matched" : ""}"
+                       onclick="clickRight('${p.id}')">${p.right}</div>
+                `).join("")}
+              </div>
+            </div>
+            <div class="feedback" id="lv2Fb"></div>
+          </div>
+        `;
+      }
+
+      window.clickLeft = function(id, text, lang) {
+        if (matchedIds.has(id)) return;
+        selectedLeft = id;
+        speak(text, lang);
+        renderMatch();
+      };
+
+      window.clickRight = function(id) {
+        if (!selectedLeft || matchedIds.has(id)) return;
+        const fb = document.getElementById("lv2Fb");
+        if (selectedLeft === id) {
+          matchedIds.add(id);
+          selectedLeft = null;
+          addStars(2);
+          renderMatch();
+          document.getElementById("lv2Fb").style.color = "#15803d";
+          document.getElementById("lv2Fb").textContent = "✅ 配對成功！";
+          if (matchedIds.size === pairs.length) {
+            state.scores.lv2 = pairs.length;
+            state.passed.lv2 = true;
+            setTimeout(showResultSheet, 700);
+          }
+        } else {
+          selectedLeft = null;
+          renderMatch();
+          fb.style.color = "#b91c1c";
+          fb.textContent = "再試一次配對看看喔！";
+        }
+      };
+
+      renderMatch();
+    }
+
+    function startLv3() {
+      stopActiveMic();
+      const items = [
+        { q: "課文填空：我們不（ ）的跑。", hint: "提示：停", ans: ["停"], lang: "zh-TW" },
+        { q: "課文填空：大風不停的（ ）。", hint: "提示：吹", ans: ["吹"], lang: "zh-TW" },
+        { q: "英文缺字：__ nt（螞蟻）", hint: "提示：a", ans: ["a", "A"], lang: "en-US" },
+        { q: "英文缺字：b __ ll（球）", hint: "提示：a", ans: ["a", "A"], lang: "en-US" },
+        { q: "字母接龍：Mm ➔ Nn ➔（ ）➔ Pp", hint: "提示：Oo", ans: ["oo", "Oo", "OO", "o"], lang: "en-US" },
+        { q: "字母接龍：Xx ➔ Yy ➔（ ）", hint: "提示：Zz", ans: ["zz", "Zz", "ZZ", "z"], lang: "en-US" }
+      ];
+      let idx = 0;
+      let score = 0;
+
+      function renderFill() {
+        const cur = items[idx];
+        document.getElementById("stage").innerHTML = `
+          <div class="panel">
+            <div style="font-weight:800; font-size:17px;">💜 關卡三：單字偵探填空（第 ${idx + 1} / ${items.length} 題）</div>
+            <p style="margin:8px 0 4px; font-size:15px; font-weight:700;">${cur.q}</p>
+            <div style="font-size:12.5px; color:#6b7280;">${cur.hint}</div>
+            <div class="input-row">
+              <input id="ansInput" class="fill-input" type="text" placeholder="輸入答案..." />
+              <button class="small-btn" onclick="checkFill()">送出</button>
+            </div>
+            <div class="feedback" id="lv3Fb"></div>
+          </div>
+        `;
+      }
+
+      window.checkFill = function() {
+        const val = document.getElementById("ansInput").value.trim();
+        const fb = document.getElementById("lv3Fb");
+        const ok = items[idx].ans.includes(val);
+        if (ok) {
+          score++;
+          addStars(2);
+          fb.style.color = "#15803d";
+          fb.textContent = "🎉 偵探破案成功！+2 顆星星";
+        } else {
+          fb.style.color = "#b91c1c";
+          fb.textContent = `正確答案參考：${items[idx].ans[0]}`;
+        }
+        setTimeout(() => {
+          idx++;
+          if (idx < items.length) renderFill();
+          else {
+            state.scores.lv3 = score;
+            state.passed.lv3 = true;
+            showResultSheet();
+          }
+        }, 950);
+      };
+
+      renderFill();
+    }
+
+    function startSpeakingChallenge() {
+      stopActiveMic();
+      const tasks = [
+        { target: "大風", sub: "ㄉㄚˋ ㄈㄥ｜大聲唸出來！", lang: "zh-TW", keys: ["大風", "風"] },
+        { target: "一起來", sub: "ㄧˋ ㄑㄧˇ ㄌㄞˊ｜揪大家一起來！", lang: "zh-TW", keys: ["一起來", "一起", "來"] },
+        { target: "不停的跑", sub: "ㄅㄨˋ ㄖㄥˊ ㄉㄜ˙ ㄆㄠˇ｜雙腳快快跑！", lang: "zh-TW", keys: ["不停的跑", "不停", "跑"] },
+        { target: "apple", sub: "蘋果｜大聲唸出 apple！", lang: "en-US", keys: ["apple"] },
+        { target: "bee", sub: "蜜蜂｜大聲唸出 bee！", lang: "en-US", keys: ["bee", "be", "b"] },
+        { target: "cat", sub: "貓｜大聲唸出 cat！", lang: "en-US", keys: ["cat", "cats"] }
+      ];
+      let idx = 0;
+      let score = 0;
+      let advancing = false;
+
+      function renderSpeakTask() {
+        advancing = false;
+        const cur = tasks[idx];
+        document.getElementById("stage").innerHTML = `
+          <div class="panel">
+            <div style="font-weight:800; font-size:17px;">🎤 關卡四：大聲唸出來闖關（第 ${idx + 1} / ${tasks.length} 題）</div>
+            <div class="speak-stage">
+              <div style="font-size:13px; color:#881337; font-weight:700;">👾 聲音小怪獸出現了！大聲唸出這一句：</div>
+              <div class="target-big">${cur.target}</div>
+              <div style="font-size:13px; color:#4b5563; font-weight:700;">${cur.sub}</div>
+              <button class="small-btn" style="margin-top:8px;" onclick="speak('${cur.target}', '${cur.lang}')">🔊 先聽示範發音</button>
+              <div class="meter-wrap"><div class="meter-bar" id="volBar"></div></div>
+              <div style="font-size:12px; color:#6b7280;" id="heardBox">按下方麥克風按鈕開始唸唸看！</div>
+            </div>
+            <button class="mic-btn" id="micBtn" onclick="toggleSpeakMic()">🎤 按一下開始大聲唸</button>
+            <button class="secondary-btn" onclick="parentPassSpeak()">⭐ 聲音感應／家長確認已大聲唸對（直接過關）</button>
+            <div class="feedback" id="spkFb"></div>
+          </div>
+        `;
+      }
+
+      function passCurrent(msg) {
+        if (advancing) return;
+        advancing = true;
+        stopActiveMic();
+        score++;
+        addStars(2);
+        const fb = document.getElementById("spkFb");
+        if (fb) {
+          fb.style.color = "#15803d";
+          fb.textContent = msg || "🎉 聲音超響亮，小怪獸被震飛了！+2 顆星星";
+        }
+        setTimeout(() => {
+          idx++;
+          if (idx < tasks.length) renderSpeakTask();
+          else {
+            state.scores.speak = score;
+            state.passed.speak = true;
+            showResultSheet();
+          }
+        }, 950);
+      }
+
+      window.parentPassSpeak = function() {
+        passCurrent("✅ 已記錄口說闖關！+2 顆星星");
+      };
+
+      window.toggleSpeakMic = function() {
+        const cur = tasks[idx];
+        const btn = document.getElementById("micBtn");
+        const heardBox = document.getElementById("heardBox");
+        const fb = document.getElementById("spkFb");
+        const bar = document.getElementById("volBar");
+
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let rec = null;
+        let audioCtx = null;
+        let analyser = null;
+        let rafId = null;
+        let micStream = null;
+        let loudSamples = 0;
+
+        stopActiveMic();
+        btn.classList.add("listening");
+        btn.textContent = "🎙️ 正在聽你大聲唸...（再按一下停止）";
+        fb.textContent = "";
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia && (window.AudioContext || window.webkitAudioContext)) {
+          navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+            micStream = stream;
+            const Ctx = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new Ctx();
+            const src = audioCtx.createMediaStreamSource(stream);
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 256;
+            src.connect(analyser);
+            const data = new Uint8Array(analyser.frequencyBinCount);
+
+            const tick = () => {
+              if (!analyser) return;
+              analyser.getByteFrequencyData(data);
+              let sum = 0;
+              for (let i = 0; i < data.length; i++) sum += data[i];
+              const avg = sum / data.length;
+              const pct = Math.min(100, Math.round((avg / 65) * 100));
+              if (bar) bar.style.width = pct + "%";
+              if (avg > 28) loudSamples++;
+              if (loudSamples >= 14 && !advancing) {
+                passCurrent("🎉 聲音夠大聲！小怪獸被震飛啦！+2 顆星星");
+                return;
+              }
+              rafId = requestAnimationFrame(tick);
+            };
+            tick();
+          }).catch(() => {});
+        }
+
+        if (SpeechRec) {
+          rec = new SpeechRec();
+          rec.lang = cur.lang;
+          rec.interimResults = true;
+          rec.maxAlternatives = 3;
+
+          rec.onresult = (event) => {
+            let transcript = "";
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              transcript += event.results[i][0].transcript;
+            }
+            const clean = transcript.trim().toLowerCase();
+            if (heardBox) heardBox.textContent = `聽到你唸：${transcript}`;
+            const hit = cur.keys.some(k => clean.includes(k.toLowerCase()));
+            if (hit && !advancing) {
+              passCurrent(`🎉 唸對了「${cur.target}」！+2 顆星星`);
+            }
+          };
+
+          rec.onerror = () => {
+            if (heardBox && !advancing) {
+              heardBox.textContent = "這台裝置若未辨識到字，也可以大聲唸出或點下方按鈕過關喔！";
+            }
+          };
+
+          try { rec.start(); } catch (e) {}
+        } else if (heardBox) {
+          heardBox.textContent = "目前瀏覽器未內建語音辨識，請對著麥克風大聲唸出或點下方按鈕過關！";
+        }
+
+        activeMicStop = function() {
+          if (rafId) cancelAnimationFrame(rafId);
+          if (rec) {
+            try { rec.stop(); } catch (e) {}
+          }
+          if (micStream) {
+            micStream.getTracks().forEach(t => t.stop());
+          }
+          if (audioCtx) {
+            audioCtx.close().catch(() => {});
+          }
+          const b = document.getElementById("micBtn");
+          if (b) {
+            b.classList.remove("listening");
+            b.textContent = "🎤 按一下開始大聲唸";
+          }
+        };
+      };
+
+      renderSpeakTask();
+    }
+
+    function showResultSheet() {
+      stopActiveMic();
+      const totalGot = state.scores.lv1 + state.scores.lv2 + state.scores.lv3 + state.scores.speak;
+      const totalMax = state.maxScores.lv1 + state.maxScores.lv2 + state.maxScores.lv3 + state.maxScores.speak;
+      let badge = "🥉 暖身小高手：回到「魔法學習圖鑑」再聽一次、唸一次，慢慢來就會越來越熟！";
+      if (totalGot >= 19) {
+        badge = "🥇 超級闖關小勇士：聽音、配對、填空與大聲唸都超棒，考前信心滿滿！";
+      } else if (totalGot >= 11) {
+        badge = "🥈 穩健探險家：大部分題目都答對了，把還沒過關的字或單字再唸 2 遍就更穩！";
+      }
+
+      document.getElementById("stage").innerHTML = `
+        <div class="panel">
+          <div style="font-weight:800; font-size:18px;">🏆 闖關測驗結果單</div>
+          <div style="font-size:13px; color:#4b5563; margin-top:4px;">
+            累積星星：<strong>⭐ ${state.stars}</strong>｜關卡總得分：<strong>${totalGot} / ${totalMax}</strong>
+          </div>
+          <table class="result-table">
+            <thead>
+              <tr><th>關卡</th><th>內容</th><th>得分</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>暖身準備</td><td>《大風吹》＆ Aa~Zz / A-C</td><td>${state.warmDone ? "✅ 完成" : "未完成"}</td></tr>
+              <tr><td>關卡一</td><td>聽力點餐王</td><td>${state.scores.lv1} / ${state.maxScores.lv1}</td></tr>
+              <tr><td>關卡二</td><td>趣味連連看</td><td>${state.scores.lv2} / ${state.maxScores.lv2}</td></tr>
+              <tr><td>關卡三</td><td>單字偵探填空</td><td>${state.scores.lv3} / ${state.maxScores.lv3}</td></tr>
+              <tr><td>關卡四</td><td>大聲唸出來闖關 🎤</td><td>${state.scores.speak} / ${state.maxScores.lv4 ?? state.maxScores.speak}</td></tr>
+            </tbody>
+          </table>
+          <div class="badge-box">${badge}</div>
+          <button class="primary-btn" onclick="goHome()">回到關卡大廳再挑戰</button>
+          <button class="secondary-btn" onclick="resetAll()">重新計算星星與成績</button>
+        </div>
+      `;
+    }
+
+    function resetAll() {
+      stopActiveMic();
+      state.stars = 0;
+      state.warmDone = false;
+      state.scores = { lv1: 0, lv2: 0, lv3: 0, speak: 0 };
+      state.passed = { lv1: false, lv2: false, lv3: false, speak: false };
+      document.getElementById("starCount").textContent = "0";
+      goHome();
+    }
+
+    goHome();
+  </script>
+</body>
+</html>
